@@ -46,12 +46,12 @@ D = double(subs(Ds, consts, c_vals));
 % before tuning
 Q = eye(6,6);
 R = 1;
-Kf = lqr(A, B, Q, R);
+L = lqr(A, B, Q, R);
 
 tspan = 0:0.5:30;
 X0 = [0; 0; deg2rad(10); 0; deg2rad(-10); 0];   % initial state
 XT = [0; 0; 0; 0; 0; 0];                        % terminal state
-u = @(X) -Kf*(X - XT);                           % control law
+u = @(X) -L*(X - XT);                           % control law
 [t,X] = ode45(@(t,X) A*X + B*u(X), tspan, X0);
 
 %% Show animation
@@ -66,14 +66,14 @@ Q(5,5) = 1000;      % penalize t2
 Q(6,6) = 1000;      % penalize t2d
 R = 0.00001;
 
-Kf = lqr(A, B, Q, R);
+L = lqr(A, B, Q, R);
 
 %% Closing the loop and simulating (after tuning gains)
 
 tspan = 0:0.5:30;
 X0 = [0; 0; deg2rad(10); 0; deg2rad(-10); 0];    % initial state
 XT = [10; 0; 0; 0; 0; 0];                        % terminal state
-u = @(X) -Kf*(X - XT);                           % control law
+u = @(X) -L*(X - XT);                           % control law
 [t,X] = ode45(@(t,X) A*X + B*u(X), tspan, X0);
 
 %% Show animation
@@ -91,7 +91,7 @@ subplot(4,1,3);
 plot(t,X(:,5));
 title('Theta2 (raddian)');
 
-in = -repmat(Kf,length(X),1).*(X-repmat(XT',length(X),1));
+in = -repmat(L,length(X),1).*(X-repmat(XT',length(X),1));
 subplot(4,1,4);
 plot(t,in(:,4));
 title('Input force (N)');
