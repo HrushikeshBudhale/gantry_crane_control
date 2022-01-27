@@ -1,4 +1,4 @@
-# gantry_crane_control
+# Gantry crane control
 LQR and LQG control for gantry crane with 2 masses at different height
 
 ### Author
